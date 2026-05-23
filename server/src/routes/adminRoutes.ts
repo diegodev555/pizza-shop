@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import { adminController } from '../controllers/adminController.js';
+import { ensureAuthenticated, ensureAdmin } from '../middleware/auth.js';
 
 const router = Router();
+
+// Protect all admin routes with authentication and admin check
+router.use(ensureAuthenticated, ensureAdmin);
 
 // Categories
 router.post('/categories', adminController.createCategory);

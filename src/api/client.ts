@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 interface ApiResponse<T> {
   success: boolean;
@@ -8,9 +8,15 @@ interface ApiResponse<T> {
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`);
+  const response = await fetch(`${API_BASE}${path}`, {
+    credentials: 'include',
+    headers: { 'Accept': 'application/json' },
+  });
   const result: ApiResponse<T> = await response.json();
   if (!result.success) {
+    if (response.status === 401) {
+      throw new Error('Unauthorized. Please log in.');
+    }
     throw new Error(result.error || 'Request failed');
   }
   return result.data;
@@ -19,11 +25,15 @@ export async function apiGet<T>(path: string): Promise<T> {
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(body),
   });
   const result: ApiResponse<T> = await response.json();
   if (!result.success) {
+    if (response.status === 401) {
+      throw new Error('Unauthorized. Please log in.');
+    }
     if (result.details) {
       const error = new Error(result.details[0].message) as Error & { details: typeof result.details };
       error.details = result.details;
@@ -37,11 +47,15 @@ export async function apiPost<T>(path: string, body: unknown): Promise<T> {
 export async function apiPut<T>(path: string, body: unknown): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(body),
   });
   const result: ApiResponse<T> = await response.json();
   if (!result.success) {
+    if (response.status === 401) {
+      throw new Error('Unauthorized. Please log in.');
+    }
     throw new Error(result.error || 'Request failed');
   }
   return result.data;
@@ -50,9 +64,14 @@ export async function apiPut<T>(path: string, body: unknown): Promise<T> {
 export async function apiDelete(path: string): Promise<void> {
   const response = await fetch(`${API_BASE}${path}`, {
     method: 'DELETE',
+    credentials: 'include',
+    headers: { 'Accept': 'application/json' },
   });
   const result: ApiResponse<null> = await response.json();
   if (!result.success) {
+    if (response.status === 401) {
+      throw new Error('Unauthorized. Please log in.');
+    }
     throw new Error(result.error || 'Request failed');
   }
 }
