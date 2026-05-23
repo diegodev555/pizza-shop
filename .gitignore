@@ -76,3 +76,9 @@ yarn-error.log*
 
 # Testing
 coverage
+
+# Server
+server/node_modules
+server/dist
+server/prisma/dev.db
+server/.env

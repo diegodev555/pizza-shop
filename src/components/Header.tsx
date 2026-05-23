@@ -1,11 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { navigationItems, shopInfo } from '../data';
+import { fetchShopInfo } from '../api/shop';
+import type { ShopInfo } from '../types';
+
+const navigationItems = [
+  { label: 'Home', path: '/' },
+  { label: 'Menu', path: '/menu' },
+  { label: 'About', path: '/about' },
+  { label: 'Contact', path: '/contact' },
+];
 
 export const Header = () => {
+  const [shopInfo, setShopInfo] = useState<ShopInfo | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    fetchShopInfo().then(setShopInfo).catch(() => {});
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -29,7 +42,7 @@ export const Header = () => {
               <span className="text-white font-bold text-xl">BN</span>
             </div>
             <span className="text-xl font-bold text-gray-900 hidden sm:block">
-              {shopInfo.name}
+              {shopInfo?.name || 'Bella Napoli'}
             </span>
           </Link>
 

@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String
+  slug        String     @unique
+  description String?
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  menuItems   MenuItem[]
+}
+
+model MenuItem {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  description String
+  price       Float
+  imageUrl    String?
+  rating      Float    @default(0)
+  tags        String   @default("[]")
+  isFeatured  Boolean  @default(false)
+  spiceLevel  String?
+  isVeg       Boolean  @default(false)
+  isVegan     Boolean  @default(false)
+  isGlutenFree Boolean @default(false)
+  isAvailable Boolean  @default(true)
+  categoryId  Int
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model Promotion {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  discountText String
+  imageUrl     String?
+  code         String?
+  validUntil   String?
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Testimonial {
+  id         Int      @id @default(autoincrement())
+  name       String
+  role       String?
+  review     String
+  rating     Int      @default(5)
+  avatarUrl  String?
+  isFeatured Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ShopInfo {
+  id           Int      @id @default(autoincrement())
+  name         String
+  tagline      String?
+  phone        String
+  email        String
+  address      String
+  city         String
+  state        String?
+  zipCode      String?
+  country      String?
+  openingHours String   @default("[]")
+  mapUrl       String?
+  socialLinks  String   @default("[]")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model HomeContent {
+  id                  Int      @id @default(autoincrement())
+  heroTitle           String?
+  heroSubtitle        String?
+  heroCtaPrimaryText  String?
+  heroCtaPrimaryLink  String?
+  heroCtaSecondaryText String?
+  heroCtaSecondaryLink String?
+  aboutHeadline       String?
+  aboutText           String?
+  whyChooseUsTitle    String?
+  whyChooseUsText     String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model AboutContent {
+  id          Int      @id @default(autoincrement())
+  title       String?
+  subtitle    String?
+  storyText   String?
+  missionText String?
+  valuesText  String?
+  chefName    String?
+  chefTitle   String?
+  chefBio     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    String   @default("unread")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

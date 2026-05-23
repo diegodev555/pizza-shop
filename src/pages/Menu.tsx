@@ -1,27 +1,49 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MenuCard } from '../components';
-import { menuItems, categories } from '../data';
+import { fetchMenuItems } from '../api/menu';
+import { fetchCategories } from '../api/categories';
+import type { MenuItem, Category } from '../types';
 
 type SortOption = 'popular' | 'price-low' | 'price-high' | 'name';
 
 export const Menu = () => {
+  const [items, setItems] = useState<MenuItem[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('popular');
 
-  const filteredAndSortedItems = useMemo(() => {
-    let items = [...menuItems];
+  useEffect(() => {
+    async function load() {
+      try {
+        const [menuItems, cats] = await Promise.all([
+          fetchMenuItems(),
+          fetchCategories(),
+        ]);
+        setItems(menuItems);
+        setCategories(cats);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load menu');
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
 
-    // Filter by category
+  const filteredAndSortedItems = useMemo(() => {
+    let filtered = [...items];
+
     if (activeCategory !== 'all') {
-      items = items.filter((item) => item.category === activeCategory);
+      filtered = filtered.filter((item) => item.category === activeCategory);
     }
 
-    // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      items = items.filter(
+      filtered = filtered.filter(
         (item) =>
           item.name.toLowerCase().includes(query) ||
           item.description.toLowerCase().includes(query) ||
@@ -29,24 +51,45 @@ export const Menu = () => {
       );
     }
 
-    // Sort items
     switch (sortBy) {
       case 'popular':
-        items.sort((a, b) => b.rating - a.rating);
+        filtered.sort((a, b) => b.rating - a.rating);
         break;
       case 'price-low':
-        items.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'price-high':
-        items.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case 'name':
-        items.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
     }
 
-    return items;
-  }, [activeCategory, searchQuery, sortBy]);
+    return filtered;
+  }, [items, activeCategory, searchQuery, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading menu...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-xl mb-4">{error}</p>
+          <button onClick={() => window.location.reload()} className="text-white bg-red-600 px-6 py-2 rounded-full">Retry</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-20">
