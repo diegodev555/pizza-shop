@@ -11,15 +11,15 @@ export const Badge = ({
   size = 'sm',
   className = '',
 }: BadgeProps) => {
-  const baseStyles = 'inline-flex items-center font-semibold rounded-full';
+  const baseStyles = 'inline-flex items-center font-semibold rounded-full backdrop-blur-md border';
 
   const variants: Record<string, string> = {
-    default: 'bg-gray-100 text-gray-700',
-    success: 'bg-green-100 text-green-700',
-    warning: 'bg-amber-100 text-amber-700',
-    error: 'bg-red-100 text-red-700',
-    new: 'bg-blue-100 text-blue-700',
-    spicy: 'bg-orange-100 text-orange-700',
+    default: 'bg-white/10 border-white/15 text-white/80',
+    success: 'bg-green-500/15 border-green-400/20 text-green-300',
+    warning: 'bg-amber-500/15 border-amber-400/20 text-amber-300',
+    error: 'bg-red-500/15 border-red-400/20 text-red-300',
+    new: 'bg-blue-500/15 border-blue-400/20 text-blue-300',
+    spicy: 'bg-orange-500/15 border-orange-400/20 text-orange-300',
   };
 
   const sizes: Record<string, string> = {

@@ -5,6 +5,16 @@ import { fetchAboutContent } from '../api/shop';
 import { Link } from 'react-router-dom';
 import type { AboutContentData } from '../types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fadeUp: any = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.25, 0.1, 0.25, 1] },
+  }),
+};
+
 export const About = () => {
   const [content, setContent] = useState<AboutContentData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,8 +38,8 @@ export const About = () => {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+          <div className="w-16 h-16 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white/60">Loading...</p>
         </div>
       </div>
     );
@@ -38,36 +48,37 @@ export const About = () => {
   if (error) {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
-        <p className="text-red-600 text-xl">{error}</p>
+        <p className="text-red-400 text-xl">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-16">
       {/* Hero Section */}
       <section className="relative h-64 md:h-80 overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center scale-105"
           style={{
             backgroundImage:
               'url(https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1920&q=80)',
           }}
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+        <div className="absolute top-1/4 left-1/3 w-[400px] h-[400px] bg-red-600/8 rounded-full blur-[100px] pointer-events-none" />
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center justify-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-red-400 font-semibold uppercase tracking-wider text-sm mb-2">
+            <p className="text-red-400 font-semibold uppercase tracking-[0.2em] text-sm mb-2">
               Our Story
             </p>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               {content?.title || 'About Bella Napoli'}
             </h1>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto font-light">
               {content?.subtitle || 'A passion for authentic Italian pizza, crafted with love and tradition since 2005.'}
             </p>
           </motion.div>
@@ -75,20 +86,21 @@ export const About = () => {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-24 px-4 section-glass">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
               <SectionHeading
                 title="Our Story"
                 subtitle="Tradition & Passion"
                 centered={false}
               />
-              <div className="space-y-6 text-gray-700 text-lg">
+              <div className="space-y-6 text-white/70 text-lg leading-relaxed">
                 {content?.storyText ? (
                   content.storyText.split('\n').map((p, i) => <p key={i}>{p}</p>)
                 ) : (
@@ -121,17 +133,18 @@ export const About = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl glass-card p-1">
                 <img
                   src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80"
                   alt="Chef making pizza"
-                  className="w-full h-auto"
+                  className="w-full h-auto rounded-2xl"
                 />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-red-600 text-white p-6 rounded-2xl shadow-xl">
-                <p className="text-4xl font-bold">19+</p>
-                <p className="text-sm">Years of Excellence</p>
+              <div className="absolute -bottom-6 -left-6 glass-card px-6 py-4">
+                <p className="text-3xl font-bold text-white">19+</p>
+                <p className="text-sm text-white/60">Years of Excellence</p>
               </div>
             </motion.div>
           </div>
@@ -139,7 +152,7 @@ export const About = () => {
       </section>
 
       {/* Quality Ingredients Section */}
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-24 px-4 section-glass-alt">
         <div className="container mx-auto">
           <SectionHeading
             title="Quality Ingredients"
@@ -170,17 +183,18 @@ export const About = () => {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="bg-white rounded-2xl p-8 shadow-card text-center hover:shadow-card-hover transition-shadow duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                className="glass-card p-8 text-center"
+                custom={index}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
               >
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-6 text-red-600 text-3xl">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 text-3xl bg-red-500/10 border border-red-500/20">
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
+                <h3 className="text-xl font-bold text-white/90 mb-3">{item.title}</h3>
+                <p className="text-white/60">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -188,7 +202,7 @@ export const About = () => {
       </section>
 
       {/* Meet Our Team Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-24 px-4 section-glass">
         <div className="container mx-auto">
           <SectionHeading title="Meet Our Team" subtitle="The People Behind the Pizza" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -214,19 +228,20 @@ export const About = () => {
             ].map((member, index) => (
               <motion.div
                 key={member.id}
-                className="bg-cream rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-shadow duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                className="glass-card overflow-hidden"
+                custom={index}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
               >
                 <div className="h-64 overflow-hidden">
                   <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-red-600 font-semibold text-sm mb-4">{member.role}</p>
-                  <p className="text-gray-600 mb-4">{member.bio}</p>
+                  <h3 className="text-xl font-bold text-white/90 mb-1">{member.name}</h3>
+                  <p className="text-red-400 font-semibold text-sm mb-4">{member.role}</p>
+                  <p className="text-white/60 leading-relaxed">{member.bio}</p>
                 </div>
               </motion.div>
             ))}
@@ -235,7 +250,7 @@ export const About = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 px-4 bg-cream">
+      <section className="py-24 px-4 section-glass-alt">
         <div className="container mx-auto">
           <SectionHeading title="Our Values" subtitle="What Drives Us" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -255,17 +270,18 @@ export const About = () => {
             ].map((value, index) => (
               <motion.div
                 key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                className="glass-card p-8 text-center"
+                custom={index}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
               >
-                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-white font-bold text-2xl">{index + 1}</span>
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-red-500/30 to-red-600/20 border border-red-500/20">
+                  <span className="text-white font-bold text-2xl drop-shadow-[0_0_8px_rgba(197,61,67,0.3)]">{index + 1}</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{value.title}</h3>
-                <p className="text-gray-600">{value.description}</p>
+                <h3 className="text-2xl font-bold text-white/90 mb-4">{value.title}</h3>
+                <p className="text-white/60">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -273,23 +289,24 @@ export const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-red-600">
-        <div className="container mx-auto text-center">
+      <section className="py-24 px-4">
+        <div className="container mx-auto">
           <motion.div
+            className="glass-card p-12 md:p-16 text-center max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Come Visit Us</h2>
-            <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto font-light">
               Experience the authentic taste of Naples in a warm, welcoming atmosphere. We can't wait to serve you!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">
-                <Button variant="secondary" size="lg" className="bg-white text-red-600 hover:bg-gray-100">Get Directions</Button>
+                <Button size="lg">Get Directions</Button>
               </Link>
               <Link to="/menu">
-                <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-red-600">View Menu</Button>
+                <Button variant="outline" size="lg">View Menu</Button>
               </Link>
             </div>
           </motion.div>

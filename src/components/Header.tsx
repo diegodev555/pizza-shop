@@ -29,33 +29,33 @@ export const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <nav className="container mx-auto px-4 py-3">
+        <div className="glass rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-3"
             onClick={closeMobileMenu}
           >
-            <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-red-500 to-red-600 shadow-lg shadow-red-500/20">
               <span className="text-white font-bold text-xl">BN</span>
             </div>
-            <span className="text-xl font-bold text-gray-900 hidden sm:block">
+            <span className="text-lg font-bold text-white/90 hidden sm:block">
               {shopInfo?.name || 'Bella Napoli'}
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-1">
             {navigationItems.map((item) => (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`text-sm font-semibold transition-colors duration-300 ${
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
                   location.pathname === item.path
-                    ? 'text-red-600'
-                    : 'text-gray-700 hover:text-red-600'
+                    ? 'bg-white/15 text-white border border-white/20'
+                    : 'text-white/70 hover:text-white hover:bg-white/8'
                 }`}
               >
                 {item.label}
@@ -64,7 +64,7 @@ export const Header = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-red-600 text-white px-6 py-2 rounded-full font-semibold text-sm hover:bg-red-700 transition-colors duration-300"
+              className="ml-3 glass-btn-primary px-5 py-2 rounded-full text-sm font-semibold"
             >
               Order Now
             </motion.button>
@@ -72,7 +72,7 @@ export const Header = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-gray-700"
+            className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
             onClick={toggleMobileMenu}
             aria-label="Toggle menu"
           >
@@ -112,28 +112,29 @@ export const Header = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 pb-4"
+              initial={{ opacity: 0, y: -10, scaleY: 0.95 }}
+              animate={{ opacity: 1, y: 0, scaleY: 1 }}
+              exit={{ opacity: 0, y: -10, scaleY: 0.95 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="md:hidden mt-2 glass rounded-2xl overflow-hidden origin-top"
+              style={{ transformOrigin: 'top' }}
             >
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col p-4 space-y-1">
                 {navigationItems.map((item) => (
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`text-sm font-semibold transition-colors duration-300 ${
+                    className={`px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ${
                       location.pathname === item.path
-                        ? 'text-red-600'
-                        : 'text-gray-700 hover:text-red-600'
+                        ? 'bg-white/15 text-white border border-white/20'
+                        : 'text-white/70 hover:text-white hover:bg-white/8'
                     }`}
                     onClick={closeMobileMenu}
                   >
                     {item.label}
                   </Link>
                 ))}
-                <button className="bg-red-600 text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-red-700 transition-colors duration-300 w-full">
+                <button className="mt-2 glass-btn-primary px-5 py-3 rounded-full text-sm font-semibold w-full">
                   Order Now
                 </button>
               </div>

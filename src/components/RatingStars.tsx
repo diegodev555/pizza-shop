@@ -32,8 +32,8 @@ export const RatingStars = ({
             key={star}
             className={`${starSize} ${
               filled || halfFilled
-                ? 'text-amber-400'
-                : 'text-gray-300'
+                ? 'text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.3)]'
+                : 'text-white/20'
             }`}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -45,7 +45,7 @@ export const RatingStars = ({
         );
       })}
       {showValue && (
-        <span className="ml-1.5 text-sm font-semibold text-gray-700">
+        <span className="ml-1.5 text-sm font-semibold text-white/70">
           {rating.toFixed(1)}
         </span>
       )}

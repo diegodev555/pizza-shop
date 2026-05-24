@@ -36,12 +36,12 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
 
   return (
     <motion.div
-      className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-shadow duration-300 cursor-pointer group"
-      whileHover={{ y: -6, scale: 1.02 }}
+      className="glass-card overflow-hidden cursor-pointer group shimmer"
+      whileHover={{ y: -8, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+      transition={{ duration: 0.4, type: 'spring', stiffness: 300, damping: 20 }}
       onClick={() => onSelect?.(item)}
       role="button"
       tabIndex={0}
@@ -54,7 +54,7 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
       }}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-48 overflow-hidden rounded-t-2xl">
         <motion.img
           src={item.image}
           alt={item.name}
@@ -62,10 +62,13 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
           whileHover={{ scale: 1.15 }}
           transition={{ duration: 0.5 }}
         />
+        {/* Gradient overlay on image */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
         {/* Quick view overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <motion.span
-            className="bg-white text-gray-900 px-4 py-2 rounded-full text-sm font-semibold shadow-lg"
+            className="glass-light text-white px-5 py-2 rounded-full text-sm font-semibold"
             initial={{ y: 10, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
@@ -80,7 +83,7 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
                 key={tag}
                 variant={getTagVariant(tag)}
                 size="sm"
-                className="shadow-sm"
+                className="shadow-lg backdrop-blur-lg"
               >
                 {formatTag(tag)}
               </Badge>
@@ -92,22 +95,22 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
       {/* Content */}
       <div className="p-5">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-200">
+          <h3 className="text-lg font-bold text-white/90 group-hover:text-red-300 transition-colors duration-200">
             {item.name}
           </h3>
           <RatingStars rating={item.rating} size="sm" showValue />
         </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+        <p className="text-white/50 text-sm mb-4 line-clamp-2 leading-relaxed">
           {item.description}
         </p>
 
         <div className="flex items-center justify-between">
-          <span className="text-xl font-bold text-red-600">
+          <span className="text-xl font-bold text-red-400 drop-shadow-[0_0_8px_rgba(197,61,67,0.3)]">
             ${item.price.toFixed(2)}
           </span>
           <motion.button
-            className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition-colors duration-300"
+            className="glass-btn-primary px-4 py-2 rounded-full text-sm font-semibold"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={(e) => {
@@ -120,33 +123,20 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
         </div>
 
         {/* Additional info */}
-        <div className="mt-3 flex items-center space-x-3 text-xs text-gray-500">
+        <div className="mt-3 flex items-center space-x-3 text-xs text-white/50">
           {item.calories && (
-            <span className="flex items-center">
-              <svg
-                className="w-3 h-3 mr-1"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-.5 2.9-4.3C13.6 3.6 16 6 16 6s2 2 2 5c0 1.5-.5 2.5-1.5 3.5"
-                />
-              </svg>
-              {item.calories} cal
+            <span className="flex items-center glass-chip text-[10px] px-2 py-0.5">
+              🔥 {item.calories} cal
             </span>
           )}
           {item.isVegetarian && (
-            <span className="text-green-600 font-semibold">Veg</span>
+            <span className="text-green-400 font-semibold text-xs">Veg</span>
           )}
           {item.isVegan && (
-            <span className="text-green-600 font-semibold">Vegan</span>
+            <span className="text-emerald-400 font-semibold text-xs">Vegan</span>
           )}
           {item.spiceLevel && (
-            <span className="text-orange-600 font-semibold capitalize">
+            <span className="text-orange-400 font-semibold text-xs capitalize">
               {item.spiceLevel}
             </span>
           )}
@@ -154,18 +144,18 @@ export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
 
         {/* Quick ingredient preview */}
         {item.ingredients && item.ingredients.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-100">
+          <div className="mt-3 pt-3 border-t border-white/10">
             <div className="flex flex-wrap gap-1">
               {item.ingredients.slice(0, 3).map((ing) => (
                 <span
                   key={ing}
-                  className="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full"
+                  className="text-xs text-white/50 bg-white/8 px-2 py-0.5 rounded-full border border-white/10"
                 >
                   {ing}
                 </span>
               ))}
               {item.ingredients.length > 3 && (
-                <span className="text-xs text-red-500 font-medium">
+                <span className="text-xs text-red-400 font-medium">
                   +{item.ingredients.length - 3} more
                 </span>
               )}

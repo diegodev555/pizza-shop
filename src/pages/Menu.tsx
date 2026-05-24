@@ -86,8 +86,8 @@ export const Menu = () => {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">Loading menu...</p>
+          <div className="w-16 h-16 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white/60">Loading menu...</p>
         </div>
       </div>
     );
@@ -97,38 +97,40 @@ export const Menu = () => {
     return (
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 text-xl mb-4">{error}</p>
-          <button onClick={() => window.location.reload()} className="text-white bg-red-600 px-6 py-2 rounded-full">Retry</button>
+          <p className="text-red-400 text-xl mb-4">{error}</p>
+          <button onClick={() => window.location.reload()} className="glass-btn-primary px-6 py-2 rounded-full">Retry</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-16">
       {/* Hero Section */}
       <section className="relative h-64 md:h-80 overflow-hidden">
         <div
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center scale-105"
           style={{
             backgroundImage:
               'url(https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=80)',
           }}
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
+        <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-red-600/8 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/3 w-[300px] h-[300px] bg-amber-500/8 rounded-full blur-[80px] pointer-events-none" />
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center justify-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-red-400 font-semibold uppercase tracking-wider text-sm mb-2">
+            <p className="text-red-400 font-semibold uppercase tracking-[0.2em] text-sm mb-2">
               Our Menu
             </p>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
               Discover Our Flavors
             </h1>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-white/70 max-w-2xl mx-auto font-light">
               From classic favorites to signature creations, explore our
               handcrafted selection of pizzas, sides, and drinks.
             </p>
@@ -137,7 +139,7 @@ export const Menu = () => {
       </section>
 
       {/* Menu Content */}
-      <section className="py-16 px-4 bg-cream">
+      <section className="py-16 px-4">
         <div className="container mx-auto">
           {/* Search and Filter Bar */}
           <div className="mb-12">
@@ -145,7 +147,7 @@ export const Menu = () => {
               {/* Search Box */}
               <div className="relative w-full lg:w-96">
                 <svg
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -162,24 +164,30 @@ export const Menu = () => {
                   placeholder="Search pizzas, ingredients..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white"
+                  className="w-full pl-12 pr-4 py-3 rounded-full glass-input"
                 />
               </div>
 
               {/* Sort Dropdown */}
               <div className="flex items-center space-x-4">
-                <label className="text-gray-700 font-semibold whitespace-nowrap">
+                <label className="text-white/60 font-semibold whitespace-nowrap text-sm">
                   Sort by:
                 </label>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white cursor-pointer"
+                  className="glass-input px-5 py-3 rounded-full cursor-pointer appearance-none pr-10"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.4)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 12px center',
+                    backgroundSize: '16px',
+                  }}
                 >
-                  <option value="popular">Most Popular</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="name">Name: A to Z</option>
+                  <option value="popular" className="bg-gray-900 text-white">Most Popular</option>
+                  <option value="price-low" className="bg-gray-900 text-white">Price: Low to High</option>
+                  <option value="price-high" className="bg-gray-900 text-white">Price: High to Low</option>
+                  <option value="name" className="bg-gray-900 text-white">Name: A to Z</option>
                 </select>
               </div>
             </div>
@@ -187,15 +195,15 @@ export const Menu = () => {
 
           {/* Category Tabs */}
           <div className="mb-12 overflow-x-auto pb-4">
-            <div className="flex space-x-4 min-w-max">
+            <div className="flex space-x-3 min-w-max">
               {categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 whitespace-nowrap ${
+                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 whitespace-nowrap text-sm ${
                     activeCategory === category.id
-                      ? 'bg-red-600 text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
+                      ? 'glass-btn-primary shadow-lg shadow-red-500/20'
+                      : 'glass-chip hover:bg-white/12'
                   }`}
                 >
                   {category.name}
@@ -206,13 +214,13 @@ export const Menu = () => {
 
           {/* Results Count */}
           <div className="mb-8">
-            <p className="text-gray-600">
-              Showing <span className="font-semibold text-gray-900">{filteredAndSortedItems.length}</span> items
+            <p className="text-white/50 text-sm">
+              Showing <span className="font-semibold text-white/80">{filteredAndSortedItems.length}</span> items
               {activeCategory !== 'all' && (
-                <span> in <span className="font-semibold text-red-600">{categories.find(c => c.id === activeCategory)?.name}</span></span>
+                <span> in <span className="font-semibold text-red-400">{categories.find(c => c.id === activeCategory)?.name}</span></span>
               )}
               {searchQuery && (
-                <span> matching "<span className="font-semibold text-red-600">{searchQuery}</span>"</span>
+                <span> matching "<span className="font-semibold text-red-400">{searchQuery}</span>"</span>
               )}
             </p>
           </div>
@@ -228,10 +236,10 @@ export const Menu = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-20"
+              className="glass-card text-center py-20 px-8 max-w-lg mx-auto"
             >
               <svg
-                className="w-24 h-24 mx-auto text-gray-300 mb-6"
+                className="w-20 h-20 mx-auto text-white/20 mb-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -243,10 +251,10 @@ export const Menu = () => {
                   d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <h3 className="text-2xl font-bold text-white/80 mb-2">
                 No items found
               </h3>
-              <p className="text-gray-600">
+              <p className="text-white/50">
                 Try adjusting your search or filter to find what you're looking
                 for.
               </p>
@@ -255,7 +263,7 @@ export const Menu = () => {
                   setSearchQuery('');
                   setActiveCategory('all');
                 }}
-                className="mt-6 text-red-600 font-semibold hover:text-red-700"
+                className="mt-6 text-red-400 font-semibold hover:text-red-300 transition-colors"
               >
                 Clear all filters
               </button>

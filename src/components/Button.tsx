@@ -30,17 +30,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const baseStyles =
-      'inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed glass-btn';
 
     const variants: Record<string, string> = {
-      primary:
-        'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-lg hover:shadow-xl',
-      secondary:
-        'bg-amber-500 text-white hover:bg-amber-600 focus:ring-amber-500 shadow-md',
-      outline:
-        'border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white focus:ring-red-500',
-      ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
+      primary: 'glass-btn-primary',
+      secondary: 'glass-btn-secondary',
+      outline: 'glass-btn-outline',
+      ghost: 'glass-btn-ghost',
     };
 
     const sizes: Record<string, string> = {
@@ -62,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ${className}
         `}
         // @ts-ignore - motion props
-        whileHover={{ scale: isLoading ? 1 : 1.02 }}
+        whileHover={{ scale: isLoading ? 1 : 1.02, y: -1 }}
         // @ts-ignore - motion props
         whileTap={{ scale: isLoading ? 1 : 0.98 }}
         disabled={disabled || isLoading}

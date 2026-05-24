@@ -14,10 +14,23 @@ import { AdminHomeContent } from './pages/AdminHomeContent';
 import { AdminAboutContent } from './pages/AdminAboutContent';
 import { AdminContactMessages } from './pages/AdminContactMessages';
 
+function AmbientBackground() {
+  return (
+    <div className="ambient-bg">
+      <div className="ambient-blob" />
+      <div className="ambient-blob" />
+      <div className="ambient-blob" />
+      <div className="ambient-blob" />
+      <div className="ambient-blob" />
+    </div>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <AmbientBackground />
         <Routes>
           {/* Admin Login - no auth required */}
           <Route path="/admin/login" element={<AdminLogin />} />
