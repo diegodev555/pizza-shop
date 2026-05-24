@@ -7,12 +7,27 @@ export interface MenuItem {
   image: string;
   rating: number;
   tags: string[];
-  isFeatured: boolean;
+  isFeatured?: boolean;
   spiceLevel?: 'mild' | 'medium' | 'hot';
   calories?: number;
   isVegetarian?: boolean;
   isVegan?: boolean;
   isGlutenFree?: boolean;
+  // Extended detail fields
+  ingredients?: string[];
+  crustType?: string;
+  prepTime?: number;
+  sizeOptions?: string[];
+  addons?: string[];
+  allergens?: string[];
+  nutritionInfo?: {
+    fat?: string;
+    carbs?: string;
+    protein?: string;
+    sodium?: string;
+    fiber?: string;
+  };
+  backgroundImage?: string;
 }
 
 export interface Category {

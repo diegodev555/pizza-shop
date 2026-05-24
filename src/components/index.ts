@@ -4,3 +4,7 @@ export * from './SectionHeading';
 export * from './Header';
 export * from './Footer';
 export * from './MenuCard';
+export * from './MenuDetailModal';
+export * from './RatingStars';
+export * from './TagBadge';
+export * from './IngredientList';

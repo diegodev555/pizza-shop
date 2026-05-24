@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion';
 import type { MenuItem } from '../types';
 import { Badge } from './Badge';
+import { RatingStars } from './RatingStars';
+import { TagBadge } from './TagBadge';
 
 interface MenuCardProps {
   item: MenuItem;
+  onSelect?: (item: MenuItem) => void;
 }
 
-export const MenuCard = ({ item }: MenuCardProps) => {
+export const MenuCard = ({ item, onSelect }: MenuCardProps) => {
   const getTagVariant = (tag: string) => {
     switch (tag.toLowerCase()) {
       case 'new':
@@ -33,21 +36,45 @@ export const MenuCard = ({ item }: MenuCardProps) => {
 
   return (
     <motion.div
-      className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-shadow duration-300"
-      whileHover={{ y: -4 }}
+      className="bg-white rounded-2xl shadow-card overflow-hidden hover:shadow-card-hover transition-shadow duration-300 cursor-pointer group"
+      whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
+      onClick={() => onSelect?.(item)}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${item.name}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect?.(item);
+        }
+      }}
     >
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
-        <img
+        <motion.img
           src={item.image}
           alt={item.name}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+          className="w-full h-full object-cover"
+          whileHover={{ scale: 1.15 }}
+          transition={{ duration: 0.5 }}
         />
+        {/* Quick view overlay */}
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <motion.span
+            className="bg-white text-gray-900 px-4 py-2 rounded-full text-sm font-semibold shadow-lg"
+            initial={{ y: 10, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            Quick View
+          </motion.span>
+        </div>
         {item.tags.length > 0 && (
-          <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+          <div className="absolute top-3 left-3 flex flex-wrap gap-1 z-10">
             {item.tags.slice(0, 2).map((tag) => (
               <Badge
                 key={tag}
@@ -65,19 +92,10 @@ export const MenuCard = ({ item }: MenuCardProps) => {
       {/* Content */}
       <div className="p-5">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-          <div className="flex items-center space-x-1">
-            <svg
-              className="w-4 h-4 text-amber-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span className="text-sm font-semibold text-gray-700">
-              {item.rating}
-            </span>
-          </div>
+          <h3 className="text-lg font-bold text-gray-900 group-hover:text-red-600 transition-colors duration-200">
+            {item.name}
+          </h3>
+          <RatingStars rating={item.rating} size="sm" showValue />
         </div>
 
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
@@ -88,11 +106,17 @@ export const MenuCard = ({ item }: MenuCardProps) => {
           <span className="text-xl font-bold text-red-600">
             ${item.price.toFixed(2)}
           </span>
-          <button
+          <motion.button
             className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition-colors duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.(item);
+            }}
           >
-            Add to Cart
-          </button>
+            View Details
+          </motion.button>
         </div>
 
         {/* Additional info */}
@@ -127,6 +151,27 @@ export const MenuCard = ({ item }: MenuCardProps) => {
             </span>
           )}
         </div>
+
+        {/* Quick ingredient preview */}
+        {item.ingredients && item.ingredients.length > 0 && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <div className="flex flex-wrap gap-1">
+              {item.ingredients.slice(0, 3).map((ing) => (
+                <span
+                  key={ing}
+                  className="text-xs text-gray-500 bg-gray-50 px-2 py-0.5 rounded-full"
+                >
+                  {ing}
+                </span>
+              ))}
+              {item.ingredients.length > 3 && (
+                <span className="text-xs text-red-500 font-medium">
+                  +{item.ingredients.length - 3} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { MenuCard } from '../components';
+import { MenuCard, MenuDetailModal } from '../components';
 import { fetchMenuItems } from '../api/menu';
 import { fetchCategories } from '../api/categories';
 import type { MenuItem, Category } from '../types';
@@ -15,6 +15,19 @@ export const Menu = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('popular');
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleSelectItem = useCallback((item: MenuItem) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    // Delay clearing the item so the exit animation plays
+    setTimeout(() => setSelectedItem(null), 300);
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -208,7 +221,7 @@ export const Menu = () => {
           {filteredAndSortedItems.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredAndSortedItems.map((item) => (
-                <MenuCard key={item.id} item={item} />
+                <MenuCard key={item.id} item={item} onSelect={handleSelectItem} />
               ))}
             </div>
           ) : (
@@ -250,6 +263,13 @@ export const Menu = () => {
           )}
         </div>
       </section>
+
+      {/* Detail Modal */}
+      <MenuDetailModal
+        item={selectedItem}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
