@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SectionHeading, Button, MenuCard } from '../components';
+import { SectionHeading, Button, MenuCard, Logo } from '../components';
 import { fetchFeaturedItems } from '../api/menu';
 import { fetchPromotions } from '../api/promotions';
 import { fetchTestimonials } from '../api/testimonials';
 import { fetchShopInfo, fetchHomeContent } from '../api/shop';
 import type { MenuItem, Promotion, Testimonial, ShopInfo, HomeContentData } from '../types';
+import { SHOP_NAME, SHOP_TAGLINE } from '../data/shopInfo';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fadeUp: any = {
@@ -56,7 +57,8 @@ export const Home = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-white/60">Loading Bella Napoli...</p>
+          <Logo size="md" showAnimation />
+          <p className="text-white/60 mt-4">Loading {SHOP_NAME}...</p>
         </div>
       </div>
     );
@@ -85,7 +87,7 @@ export const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
 
-        {/* Ambient glow blobs behind hero text */}
+        {/* Ambient glow blobs behind hero content */}
         <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-[100px] pointer-events-none" />
 
@@ -95,23 +97,32 @@ export const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
+          {/* Hero Logo */}
+          <motion.div
+            className="mb-6 flex justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            <Logo size="xl" showAnimation showGlow />
+          </motion.div>
+
           <motion.p
             className="text-red-400 font-semibold uppercase tracking-[0.2em] text-sm md:text-base mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            {homeContent?.heroSubtitle || 'Authentic Italian Pizza'}
+            {homeContent?.heroSubtitle || SHOP_TAGLINE}
           </motion.p>
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
-            {homeContent?.heroTitle || 'Taste the Tradition of '}
-            {(!homeContent?.heroTitle || homeContent.heroTitle.includes('Naples')) && (
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-amber-300">Naples</span>
+            {homeContent?.heroTitle || 'Taste the Joy at '}
+            {(!homeContent?.heroTitle || homeContent.heroTitle.includes('Joy')) && (
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-amber-300">{SHOP_NAME}</span>
             )}
           </h1>
           <p className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl mx-auto font-light">
-            Handcrafted pizzas made with the finest ingredients, wood-fired to
-            perfection. Experience the authentic flavors of Italy in every bite.
+            Handcrafted pizzas, juicy burgers, and joyful food experiences crafted with the finest ingredients.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to={homeContent?.heroCtaPrimaryLink || '/menu'}>
@@ -150,7 +161,6 @@ export const Home = () => {
                   whileInView="visible"
                   viewport={{ once: true }}
                 >
-                  {/* We use a wrapper div since MenuCard has its own motion */}
                   <MenuCard item={pizza} />
                 </motion.div>
               ))}
@@ -167,7 +177,7 @@ export const Home = () => {
       {/* Why Choose Us Section */}
       <section className="py-24 px-4 section-glass-alt">
         <div className="container mx-auto">
-          <SectionHeading title={homeContent?.aboutHeadline || 'Why Choose Bella Napoli'} subtitle={homeContent?.whyChooseUsTitle || 'Our Promise'} />
+          <SectionHeading title={homeContent?.aboutHeadline || `Why Choose ${SHOP_NAME}`} subtitle={homeContent?.whyChooseUsTitle || 'Our Promise'} />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { icon: '📖', title: 'Authentic Recipes', description: 'Traditional Neapolitan recipes passed down through generations.' },
@@ -362,8 +372,8 @@ export const Home = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Order?</h2>
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto font-light">
-              Get your favorite pizza delivered hot and fresh to your doorstep.
-              Order now and experience the taste of Italy!
+              Get your favorite food delivered hot and fresh to your doorstep.
+              Order now and experience the joy!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/menu">

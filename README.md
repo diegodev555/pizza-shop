@@ -1,4 +1,4 @@
-# Bella Napoli Pizzeria
+# PB&J - Pizza, Burgers & Joy
 
 A modern, responsive pizza shop website built with React, TypeScript, Vite, and Tailwind CSS.
 

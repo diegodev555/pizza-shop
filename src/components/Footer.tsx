@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Logo } from './Logo';
 import { fetchShopInfo } from '../api/shop';
 import type { ShopInfo } from '../types';
+import { SHOP_NAME, SHOP_TAGLINE } from '../data/shopInfo';
 
 const navigationItems = [
   { label: 'Home', path: '/' },
@@ -27,14 +29,12 @@ export const Footer = () => {
             {/* Brand Section */}
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-red-500 to-red-600 shadow-lg shadow-red-500/20">
-                  <span className="text-white font-bold text-xl">BN</span>
-                </div>
-                <span className="text-xl font-bold text-white/190">{shopInfo?.name || 'Bella Napoli Pizzeria'}</span>
+                <Logo size="sm" />
+                <span className="text-xl font-bold text-white/90">{shopInfo?.name || SHOP_NAME}</span>
               </div>
+              <p className="text-sm text-red-400 font-semibold mb-2">{SHOP_TAGLINE}</p>
               <p className="text-white/50 mb-4 text-sm leading-relaxed">
-                Authentic Italian pizza crafted with passion and the finest
-                ingredients. Experience the taste of Naples in every bite.
+                PB&J serves handcrafted pizzas, juicy burgers, and joyful food experiences in a modern premium atmosphere. Every bite is crafted with passion and the finest ingredients.
               </p>
               <div className="flex space-x-3">
                 {shopInfo?.socialLinks?.map((link) => (
@@ -130,7 +130,7 @@ export const Footer = () => {
           <div className="section-divider mt-12 mb-8" />
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-white/40 text-sm">
-              &copy; {currentYear} {shopInfo?.name || 'Bella Napoli Pizzeria'}. All rights reserved.
+              &copy; {currentYear} {shopInfo?.name || SHOP_NAME}. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-white/40 hover:text-white/70 text-sm transition-colors duration-300">Privacy Policy</a>

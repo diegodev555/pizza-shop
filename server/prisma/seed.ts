@@ -129,8 +129,8 @@ async function main() {
   // Shop Info
   await prisma.shopInfo.create({
     data: {
-      name: 'Bella Napoli Pizzeria', tagline: 'Authentic Italian Pizza',
-      phone: '+1 (555) 123-4567', email: 'hello@bellanapoli.com',
+      name: 'PB&J', tagline: 'Pizza, Burgers & Joy',
+      phone: '+1 (555) 123-4567', email: 'hello@pbj.com',
       address: '123 Italian Way', city: 'San Francisco',
       state: 'CA', zipCode: '94102', country: 'United States',
       openingHours: JSON.stringify([
@@ -143,9 +143,9 @@ async function main() {
         { day: 'Sunday', open: '12:00 PM', close: '9:00 PM' },
       ]),
       socialLinks: JSON.stringify([
-        { platform: 'Instagram', url: 'https://instagram.com/bellanapoli', icon: 'instagram' },
-        { platform: 'Facebook', url: 'https://facebook.com/bellanapoli', icon: 'facebook' },
-        { platform: 'Twitter', url: 'https://twitter.com/bellanapoli', icon: 'twitter' },
+        { platform: 'Instagram', url: 'https://instagram.com/pbj', icon: 'instagram' },
+        { platform: 'Facebook', url: 'https://facebook.com/pbj', icon: 'facebook' },
+        { platform: 'Twitter', url: 'https://twitter.com/pbj', icon: 'twitter' },
       ]),
     },
   });
@@ -154,13 +154,13 @@ async function main() {
   // Home Content
   await prisma.homeContent.create({
     data: {
-      heroTitle: 'Taste the Tradition of Naples',
-      heroSubtitle: 'Authentic Italian Pizza',
+      heroTitle: 'Taste the Joy at PB&J',
+      heroSubtitle: 'Pizza, Burgers & Joy',
       heroCtaPrimaryText: 'View Full Menu',
       heroCtaPrimaryLink: '/menu',
       heroCtaSecondaryText: 'Book a Table',
       heroCtaSecondaryLink: '/contact',
-      aboutHeadline: 'Why Choose Bella Napoli',
+      aboutHeadline: 'Why Choose PB&J',
       whyChooseUsTitle: 'Our Promise',
     },
   });
@@ -169,10 +169,10 @@ async function main() {
   // About Content
   await prisma.aboutContent.create({
     data: {
-      title: 'About Bella Napoli',
+      title: 'About PB&J',
       subtitle: 'Our Story',
-      storyText: 'Bella Napoli Pizzeria was born from a dream to bring the authentic taste of Naples to San Francisco. Founded by Marco Rossi, a third-generation pizzaiolo from Naples, Italy, our pizzeria has been serving handcrafted pizzas since 2005.',
-      missionText: 'Every pizza at Bella Napoli is a labor of love. Our dough is made fresh daily using a 48-hour fermentation process, just like they do in Naples. We import our San Marzano tomatoes directly from the volcanic slopes of Mount Vesuvius and use only the finest mozzarella di bufala.',
+      storyText: 'PB&J was born from a dream to bring together authentic handcrafted pizza and juicy burgers. Founded with a passion for great food and joyful experiences, we have been serving our community since 2005.',
+      missionText: 'Every pizza at PB&J is a labor of love. Our dough is made fresh daily using a 48-hour fermentation process. We import our San Marzano tomatoes directly from the volcanic slopes of Mount Vesuvius and use only the finest mozzarella di bufala.',
       valuesText: 'Our wood-fired oven, built by master craftsmen in Naples, reaches temperatures of up to 900°F, creating that perfect leopard-spotted crust that\'s crispy on the outside and soft and chewy on the inside.',
       chefName: 'Marco Rossi',
       chefTitle: 'Head Chef & Owner',

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { SectionHeading, Button } from '../components';
+import { SectionHeading, Button, Logo } from '../components';
 import { fetchAboutContent } from '../api/shop';
 import { Link } from 'react-router-dom';
 import type { AboutContentData } from '../types';
+import { SHOP_NAME } from '../data/shopInfo';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fadeUp: any = {
@@ -39,7 +40,8 @@ export const About = () => {
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-red-500/30 border-t-red-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-white/60">Loading...</p>
+          <Logo size="md" showAnimation />
+          <p className="text-white/60 mt-4">Loading {SHOP_NAME}...</p>
         </div>
       </div>
     );
@@ -76,10 +78,10 @@ export const About = () => {
               Our Story
             </p>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-              {content?.title || 'About Bella Napoli'}
+              {content?.title || `About ${SHOP_NAME}`}
             </h1>
             <p className="text-lg text-white/70 max-w-2xl mx-auto font-light">
-              {content?.subtitle || 'A passion for authentic Italian pizza, crafted with love and tradition since 2005.'}
+              {content?.subtitle || 'A passion for great food, crafted with love and tradition since 2005.'}
             </p>
           </motion.div>
         </div>
@@ -106,17 +108,17 @@ export const About = () => {
                 ) : (
                   <>
                     <p>
-                      Bella Napoli Pizzeria was born from a dream to bring the
-                      authentic taste of Naples to San Francisco. Founded by Marco
-                      Rossi, a third-generation pizzaiolo from Naples, Italy, our
-                      pizzeria has been serving handcrafted pizzas since 2005.
+                      {SHOP_NAME} was born from a dream to bring together the best of two
+                      worlds — authentic, handcrafted pizza and juicy, mouthwatering burgers.
+                      Founded with a passion for great food and joyful experiences, we've been
+                      serving our community since 2005.
                     </p>
                     <p>
-                      Every pizza at Bella Napoli is a labor of love. Our dough is
-                      made fresh daily using a 48-hour fermentation process, just
-                      like they do in Naples. We import our San Marzano tomatoes
-                      directly from the volcanic slopes of Mount Vesuvius and use
-                      only the finest mozzarella di bufala.
+                      Every pizza at {SHOP_NAME} is a labor of love. Our dough is
+                      made fresh daily using a 48-hour fermentation process. We import our
+                      San Marzano tomatoes directly from the volcanic slopes of Mount Vesuvius
+                      and use only the finest mozzarella di bufala. Our burgers are crafted
+                      from premium cuts, ground fresh daily.
                     </p>
                     <p>
                       Our wood-fired oven, built by master craftsmen in Naples,
@@ -156,7 +158,7 @@ export const About = () => {
         <div className="container mx-auto">
           <SectionHeading
             title="Quality Ingredients"
-            subtitle="The Bella Napoli Difference"
+            subtitle={`The ${SHOP_NAME} Difference`}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
@@ -204,7 +206,7 @@ export const About = () => {
       {/* Meet Our Team Section */}
       <section className="py-24 px-4 section-glass">
         <div className="container mx-auto">
-          <SectionHeading title="Meet Our Team" subtitle="The People Behind the Pizza" />
+          <SectionHeading title="Meet Our Team" subtitle="The People Behind the Food" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
@@ -216,13 +218,13 @@ export const About = () => {
               {
                 id: 2, name: 'Sofia Bianchi',
                 role: 'Pastry Chef',
-                bio: "Sofia's expertise in Italian desserts complements our pizza menu perfectly. Her tiramisu and cannoli are made from her grandmother's secret recipes.",
+                bio: "Sofia's expertise in Italian desserts complements our menu perfectly. Her tiramisu and cannoli are made from her grandmother's secret recipes.",
                 image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
               },
               {
                 id: 3, name: 'Antonio Marino',
                 role: 'Restaurant Manager',
-                bio: 'Antonio ensures every guest has an exceptional dining experience. His warm personality and attention to detail make Bella Napoli feel like home.',
+                bio: `Antonio ensures every guest has an exceptional dining experience. His warm personality and attention to detail make ${SHOP_NAME} feel like home.`,
                 image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
               },
             ].map((member, index) => (
@@ -257,15 +259,15 @@ export const About = () => {
             {[
               {
                 title: 'Authenticity',
-                description: 'We stay true to Neapolitan traditions, using time-honored recipes and techniques passed down through generations.',
+                description: 'We stay true to traditional recipes and techniques, using time-honored methods passed down through generations.',
               },
               {
                 title: 'Quality',
-                description: 'We never compromise on ingredients. Every component of our pizza is carefully selected for the finest quality.',
+                description: 'We never compromise on ingredients. Every component of our food is carefully selected for the finest quality.',
               },
               {
                 title: 'Community',
-                description: 'We believe in bringing people together. Our pizzeria is a place where families and friends create memories.',
+                description: 'We believe in bringing people together. Our restaurant is a place where families and friends create memories.',
               },
             ].map((value, index) => (
               <motion.div
@@ -299,7 +301,7 @@ export const About = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Come Visit Us</h2>
             <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto font-light">
-              Experience the authentic taste of Naples in a warm, welcoming atmosphere. We can't wait to serve you!
+              Experience the joy of handcrafted food in a warm, welcoming atmosphere. We can't wait to serve you!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/contact">

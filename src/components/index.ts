@@ -1,4 +1,5 @@
 export * from './Button';
+export * from './Logo';
 export * from './Badge';
 export * from './SectionHeading';
 export * from './Header';

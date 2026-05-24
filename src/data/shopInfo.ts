@@ -1,9 +1,12 @@
 import type { ShopInfo, NavItem, TeamMember } from '../types';
 
+export const SHOP_NAME = 'PB&J';
+export const SHOP_TAGLINE = 'Pizza, Burgers & Joy';
+
 export const shopInfo: ShopInfo = {
-  name: 'Bella Napoli Pizzeria',
+  name: SHOP_NAME,
   phone: '+1 (555) 123-4567',
-  email: 'hello@bellanapoli.com',
+  email: 'hello@pbj.com',
   address: {
     street: '123 Italian Way',
     city: 'San Francisco',
@@ -21,9 +24,9 @@ export const shopInfo: ShopInfo = {
     { day: 'Sunday', open: '12:00 PM', close: '9:00 PM' },
   ],
   socialLinks: [
-    { platform: 'Instagram', url: 'https://instagram.com/bellanapoli', icon: 'instagram' },
-    { platform: 'Facebook', url: 'https://facebook.com/bellanapoli', icon: 'facebook' },
-    { platform: 'Twitter', url: 'https://twitter.com/bellanapoli', icon: 'twitter' },
+    { platform: 'Instagram', url: 'https://instagram.com/pbj', icon: 'instagram' },
+    { platform: 'Facebook', url: 'https://facebook.com/pbj', icon: 'facebook' },
+    { platform: 'Twitter', url: 'https://twitter.com/pbj', icon: 'twitter' },
   ],
   coordinates: {
     lat: 37.7749,
@@ -53,7 +56,7 @@ export const teamMembers: TeamMember[] = [
     id: 2,
     name: 'Sofia Bianchi',
     role: 'Pastry Chef',
-    bio: 'Sofia\'s expertise in Italian desserts complements our pizza menu perfectly. Her tiramisu and cannoli are made from her grandmother\'s secret recipes.',
+    bio: 'Sofia\'s expertise in Italian desserts complements our menu perfectly. Her tiramisu and cannoli are made from her grandmother\'s secret recipes.',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     socialLinks: [
       { platform: 'Instagram', url: 'https://instagram.com/sofiabakes' },
@@ -63,7 +66,7 @@ export const teamMembers: TeamMember[] = [
     id: 3,
     name: 'Antonio Marino',
     role: 'Restaurant Manager',
-    bio: 'Antonio ensures every guest has an exceptional dining experience. His warm personality and attention to detail make Bella Napoli feel like home.',
+    bio: 'Antonio ensures every guest has an exceptional dining experience. His warm personality and attention to detail make PB&J feel like home.',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
     socialLinks: [],
   },

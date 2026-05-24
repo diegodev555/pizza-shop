@@ -49,9 +49,7 @@ export function AdminLogin() {
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
           {/* Logo */}
           <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">BN</span>
-            </div>
+            <span className="text-4xl font-bold text-red-600">PB&J</span>
           </div>
 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Login</h1>

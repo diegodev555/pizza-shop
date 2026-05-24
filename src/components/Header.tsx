@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Logo } from './Logo';
 import { fetchShopInfo } from '../api/shop';
 import type { ShopInfo } from '../types';
+import { SHOP_NAME } from '../data/shopInfo';
 
 const navigationItems = [
   { label: 'Home', path: '/' },
@@ -35,14 +37,14 @@ export const Header = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-2 group"
             onClick={closeMobileMenu}
           >
-            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-red-500 to-red-600 shadow-lg shadow-red-500/20">
-              <span className="text-white font-bold text-xl">BN</span>
+            <div className="transition-transform duration-300 group-hover:scale-105">
+              <Logo size="sm" />
             </div>
             <span className="text-lg font-bold text-white/90 hidden sm:block">
-              {shopInfo?.name || 'Bella Napoli'}
+              {shopInfo?.name || SHOP_NAME}
             </span>
           </Link>
 
@@ -120,6 +122,10 @@ export const Header = () => {
               style={{ transformOrigin: 'top' }}
             >
               <div className="flex flex-col p-4 space-y-1">
+                <div className="flex items-center space-x-3 px-4 py-3 border-b border-white/10 mb-2">
+                  <Logo size="sm" />
+                  <span className="text-lg font-bold text-white/90">{SHOP_NAME}</span>
+                </div>
                 {navigationItems.map((item) => (
                   <Link
                     key={item.path}

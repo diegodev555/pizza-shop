@@ -36,9 +36,7 @@ export function Sidebar() {
     <aside className="w-64 bg-gray-900 text-white min-h-screen flex flex-col">
       <div className="p-4 border-b border-gray-800">
         <Link to="/admin" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold">BN</span>
-          </div>
+          <span className="text-xl font-bold text-red-400">PB&J</span>
           <span className="font-bold">Admin Panel</span>
         </Link>
       </div>
