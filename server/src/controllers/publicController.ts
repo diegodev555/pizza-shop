@@ -45,7 +45,7 @@ export const publicController = {
 
   async getMenuItemById(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(String(req.params.id));
       const item = await menuItemService.getById(id);
       if (!item) {
         res.status(404).json({ success: false, error: 'Menu item not found' });

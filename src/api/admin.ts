@@ -27,7 +27,21 @@ export const adminApi = {
   deleteTestimonial: (id: number) => apiDelete(`/admin/testimonials/${id}`),
 
   // Shop Info
-  updateShopInfo: (data: Partial<ApiShopInfo>) => apiPut<ApiShopInfo>('/admin/shop-info', data),
+  getShopInfo: () => apiGet<ApiShopInfo | null>('/admin/shop-info'),
+  updateShopInfo: (data: {
+    name: string;
+    tagline?: string | null;
+    phone: string;
+    email: string;
+    address: string;
+    city: string;
+    state?: string | null;
+    zipCode?: string | null;
+    country?: string | null;
+    openingHours: { day: string; open: string; close: string }[];
+    mapUrl?: string | null;
+    socialLinks: { platform: string; url: string; icon: string }[];
+  }) => apiPut<ApiShopInfo>('/admin/shop-info', data),
 
   // Home Content
   updateHomeContent: (data: Partial<HomeContentData>) => apiPut<HomeContentData>('/admin/home-content', data),
@@ -38,4 +52,5 @@ export const adminApi = {
   // Contact Messages
   getContactMessages: () => apiGet('/admin/contact-messages'),
   updateContactMessage: (id: number, data: { status: string }) => apiPut(`/admin/contact-messages/${id}`, data),
+  deleteContactMessage: (id: number) => apiDelete(`/admin/contact-messages/${id}`),
 };

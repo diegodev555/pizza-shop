@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { adminApi } from '../api/admin';
+import { ConfirmDialog } from '../components/admin/ConfirmDialog';
 
 interface MenuItemForm {
   name: string;
@@ -34,19 +35,27 @@ export function AdminMenuItems() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
 
   async function load() {
     try {
+      setLoading(true);
+      setCategoriesLoading(true);
       const [menuItems, cats] = await Promise.all([
         adminApi.getMenuItems(),
         adminApi.getCategories(),
       ]);
       setItems(menuItems as unknown[]);
       setCategories(cats);
+      setCategoriesLoading(false);
     } catch (err) {
       console.error(err);
+      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to load data' });
     } finally {
       setLoading(false);
+      setCategoriesLoading(false);
     }
   }
 
@@ -60,6 +69,10 @@ export function AdminMenuItems() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!form.categoryId) {
+      setMessage({ type: 'error', text: 'Please select a category' });
+      return;
+    }
     try {
       const data = {
         ...form,
@@ -85,7 +98,7 @@ export function AdminMenuItems() {
     }
   }
 
-  async function handleEdit(item: Record<string, unknown>) {
+  function handleEdit(item: Record<string, unknown>) {
     setForm({
       name: item.name as string || '',
       slug: item.slug as string || '',
@@ -108,13 +121,16 @@ export function AdminMenuItems() {
   }
 
   async function handleDelete(id: number) {
-    if (!confirm('Delete this menu item?')) return;
+    setDeleting(true);
     try {
       await adminApi.deleteMenuItem(id);
       setMessage({ type: 'success', text: 'Menu item deleted!' });
+      setDeleteTarget(null);
       load();
     } catch (err) {
       setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to delete' });
+    } finally {
+      setDeleting(false);
     }
   }
 
@@ -155,11 +171,27 @@ export function AdminMenuItems() {
               <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="w-full border rounded-lg px-3 py-2" rows={2} />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Category</label>
-              <select value={form.categoryId} onChange={e => setForm({ ...form, categoryId: Number(e.target.value) })} className="w-full border rounded-lg px-3 py-2">
-                <option value={0}>Select...</option>
-                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
+              <label className="block text-sm font-medium mb-1">Category *</label>
+              {categoriesLoading ? (
+                <div className="w-full border rounded-lg px-3 py-2 bg-gray-50 text-gray-400">Loading categories...</div>
+              ) : categories.length === 0 ? (
+                <div className="w-full border rounded-lg px-3 py-2 bg-yellow-50 text-yellow-700 text-sm">
+                  No categories found. Create one first.
+                </div>
+              ) : (
+                <select
+                  value={form.categoryId}
+                  onChange={e => setForm({ ...form, categoryId: Number(e.target.value) })}
+                  required
+                  className={`w-full border rounded-lg px-3 py-2 ${!form.categoryId ? 'text-gray-400' : ''}`}
+                >
+                  <option value={0} disabled>Select a category...</option>
+                  {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                </select>
+              )}
+              {!form.categoryId && showForm && (
+                <p className="text-red-500 text-xs mt-1">Category is required</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Image URL</label>
@@ -216,40 +248,62 @@ export function AdminMenuItems() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Name</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Price</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Category</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Featured</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Available</th>
-                <th className="px-4 py-3 text-right text-sm font-semibold text-gray-600">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {items.map((item) => {
-                const i = item as Record<string, unknown>;
-                return (
-                  <tr key={i.id as number} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{i.name as string}</td>
-                    <td className="px-4 py-3 text-sm">${Number(i.price).toFixed(2)}</td>
-                    <td className="px-4 py-3 text-sm text-gray-600">{(i as { category?: { name: string } }).category?.name || '-'}</td>
-                    <td className="px-4 py-3 text-sm">{i.isFeatured ? '✅' : '❌'}</td>
-                    <td className="px-4 py-3 text-sm">{i.isAvailable !== false ? '✅' : '❌'}</td>
-                    <td className="px-4 py-3 text-right space-x-2">
-                      <button onClick={() => handleEdit(i)} className="text-blue-600 hover:text-blue-800 text-sm font-medium">Edit</button>
-                      <button onClick={() => handleDelete(i.id as number)} className="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+      {items.length === 0 ? (
+        <div className="bg-white rounded-xl shadow-md p-12 text-center">
+          <div className="text-6xl mb-4">🍕</div>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">No menu items yet</h3>
+          <p className="text-gray-500 mb-4">Create your first menu item to get started.</p>
+          <button onClick={() => { resetForm(); setShowForm(true); }} className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
+            Add Menu Item
+          </button>
         </div>
-      </div>
+      ) : (
+        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Name</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Price</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Category</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Featured</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">Available</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {items.map((item) => {
+                  const i = item as Record<string, unknown>;
+                  const categoryName = (i as { category?: { name: string } }).category?.name || '-';
+                  return (
+                    <tr key={i.id as number} className="hover:bg-gray-50">
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900">{i.name as string}</td>
+                      <td className="px-4 py-3 text-sm">${Number(i.price).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-sm text-gray-600">{categoryName}</td>
+                      <td className="px-4 py-3 text-sm">{i.isFeatured ? '✅' : '❌'}</td>
+                      <td className="px-4 py-3 text-sm">{i.isAvailable !== false ? '✅' : '❌'}</td>
+                      <td className="px-4 py-3 text-right space-x-2">
+                        <button onClick={() => handleEdit(i)} className="text-blue-600 hover:text-blue-800 text-sm font-medium">Edit</button>
+                        <button onClick={() => setDeleteTarget({ id: i.id as number, name: i.name as string })} className="text-red-600 hover:text-red-800 text-sm font-medium">Delete</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <ConfirmDialog
+        isOpen={deleteTarget !== null}
+        title="Delete Menu Item"
+        message={`Are you sure you want to delete "${deleteTarget?.name}"? This action cannot be undone.`}
+        confirmText="Delete"
+        onConfirm={() => deleteTarget && handleDelete(deleteTarget.id)}
+        onCancel={() => setDeleteTarget(null)}
+        isLoading={deleting}
+      />
     </div>
   );
 }
